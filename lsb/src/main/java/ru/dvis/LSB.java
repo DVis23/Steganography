@@ -6,6 +6,7 @@ public class LSB {
 
     // Внедрение сообщения
     public static BufferedImage encodeImage(BufferedImage img, byte[] msg) {
+
         return img;
     }
 

@@ -23,6 +23,7 @@ public class Main {
             BufferedImage msgImg = ImageIO.read(new File("image/lsb.jpg"));
             byte[] decodeMsgByte = LSB.decodeImage(msgImg);
 
+
             String decodeMsg = new String(decodeMsgByte);
             System.out.println(decodeMsg);
         } catch (IOException ignored) {
