@@ -1,5 +1,7 @@
 package ru.dvis;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,18 +14,15 @@ public class Main {
 
         String msg = "Hello World!";
         byte[] msgByte = msg.getBytes(StandardCharsets.US_ASCII);
-        File img = new File("image/2.jpg");
-        byte[] imgByte = Files.readAllBytes(img.toPath());
-        byte[] lsbImg = LSB.encode(imgByte, msgByte);
+        BufferedImage img = ImageIO.read(new File("image/2.jpg"));
+        BufferedImage lsbImg = LSB.encodeImage(img, msgByte);
 
         try {
-            FileOutputStream outputStream = new FileOutputStream("image/lsb.jpg");
-            outputStream.write(lsbImg);
-            outputStream.close();
+            ImageIO.write(lsbImg, "jpg", new File("image/lsb.jpg"));
 
-            File msgImg = new File("image/lsb.jpg");
-            byte[] msgImgByte = Files.readAllBytes(msgImg.toPath());
-            byte[] decodeMsgByte = LSB.decode(msgImgByte);
+            BufferedImage msgImg = ImageIO.read(new File("image/lsb.jpg"));
+            byte[] decodeMsgByte = LSB.decodeImage(msgImg);
+
             String decodeMsg = new String(decodeMsgByte);
             System.out.println(decodeMsg);
         } catch (IOException ignored) {

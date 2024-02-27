@@ -1,12 +1,18 @@
 package ru.dvis;
 
+import java.awt.image.BufferedImage;
+
 public class LSB {
 
-    public static byte[] encode(byte[] file, byte[] msg) {
-        return file;
+    // Внедрение сообщения
+    public static BufferedImage encodeImage(BufferedImage img, byte[] msg) {
+        return img;
     }
-    public static byte[] decode(byte [] file) {
-        return file;
+
+    // Извлечение сообщения
+    public static byte[] decodeImage(BufferedImage img) {
+        byte[] msg = new byte[0];
+        return msg;
     }
 
 }
