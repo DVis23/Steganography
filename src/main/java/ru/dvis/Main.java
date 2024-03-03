@@ -10,13 +10,11 @@ public class Main {
 
     public static void main(String [] args) throws IOException {
 
-        String msg = "Hello";
+        String msg = "Hello World!!!";
         System.out.println(msg);
         int msgSize = msg.length() * 8;
 
         byte[] msgByte = msg.getBytes(StandardCharsets.US_ASCII);
-        printByte(msgByte);
-        System.out.println();
         BufferedImage img = ImageIO.read(new File("image/2.jpg"));
         BufferedImage lsbImg = LSB.encodeImage(img, msgByte, msgSize);
 
@@ -25,8 +23,6 @@ public class Main {
 
             BufferedImage msgImg = ImageIO.read(new File("image/lsb.jpg"));
             byte[] decodeMsgByte = LSB.decodeImage(lsbImg, msgSize);
-            printByte(decodeMsgByte);
-
             String decodeMsg = new String(decodeMsgByte);
             System.out.println(decodeMsg);
         } catch (IOException ignored) {
