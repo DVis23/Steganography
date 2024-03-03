@@ -21,12 +21,8 @@ public class LSB {
                     if (index < msgSize) {
                         rgb[k] = replaceBit(rgb[k], getBit(msg, index), 0);
                         index++;
-                        //byte b = (byte)rgb[k];
-                        //System.out.print(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
-                        //System.out.print(" ");
                     } else {
                         img.setRGB(i, j, (rgb[0] & 0xff) << 16 | (rgb[1] & 0xff) << 8 | (rgb[2] & 0xff));
-                        //System.out.println();
                         return img;
                     }
                 }
@@ -75,17 +71,6 @@ public class LSB {
             num &= ~mask;
         }
         return num;
-    }
-
-    private static void printBitSet(BitSet bi) {
-        StringBuilder s = new StringBuilder();
-        for( int i = 0; i < bi.length();  i++ )
-        {
-            s.append( bi.get(i) ? 1: 0 );
-            if ((i + 1) % 8 == 0) s.append(" ");
-        }
-
-        System.out.println(s);
     }
 
     private static byte[] reverse(byte [] bytes) {

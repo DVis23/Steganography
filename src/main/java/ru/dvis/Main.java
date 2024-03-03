@@ -19,10 +19,10 @@ public class Main {
         BufferedImage lsbImg = LSB.encodeImage(img, msgByte, msgSize);
 
         try {
-            ImageIO.write(lsbImg, "jpg", new File("image/lsb.jpg"));
+            ImageIO.write(lsbImg, "png", new File("image/lsb.png"));
 
-            BufferedImage msgImg = ImageIO.read(new File("image/lsb.jpg"));
-            byte[] decodeMsgByte = LSB.decodeImage(lsbImg, msgSize);
+            BufferedImage msgImg = ImageIO.read(new File("image/lsb.png"));
+            byte[] decodeMsgByte = LSB.decodeImage(msgImg, msgSize);
             String decodeMsg = new String(decodeMsgByte);
             System.out.println(decodeMsg);
         } catch (IOException ignored) {
