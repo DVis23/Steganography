@@ -92,12 +92,12 @@ public class LSB {
                         if (rgb[k] == 1) bits.add(true);
                         else bits.add(false);
                     } else {
-                        return new String(Objects.requireNonNull(bitsToBytes(bits)));
+                        return new String(bitsToBytes(bits));
                     }
                 }
             }
         }
-        return new String(Objects.requireNonNull(bitsToBytes(bits)));
+        return new String(bitsToBytes(bits));
     }
 
     public static void setRGB(BufferedImage img, int i, int j, int[] rgb) {
@@ -138,8 +138,8 @@ public class LSB {
     }
 
     private static byte[] bitsToBytes(ArrayList<Boolean> bits) {
-        if (bits.size() % 8 != 0) return null;
         byte [] bytes = new byte[bits.size() / 8 - 1];
+        if (bits.size() % 8 != 0) return bytes;
         for (int i = 0; i < bits.size() - 8; i+=8) {
             StringBuilder sb = new StringBuilder();
             for (int j = 0; j < 8; j++) {
