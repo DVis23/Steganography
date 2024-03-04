@@ -4,28 +4,26 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.awt.image.BufferedImage;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class LSB {
 
-    // Внедрение сообщения
+    // Р’СЃС‚СЂР°РёРІР°РЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ РІ РёР·РѕР±СЂР°Р¶РµРЅРёРµ
     public static BufferedImage encodeImage(BufferedImage img, byte[] msg) {
-        // Получение ширины и высоты изображение
-        int width = img.getWidth();
-        int height = img.getHeight();
-
-        // Добавление в сообщение символа окончания блока
+        // Р”РѕР±Р°РІР»РµРЅРёРµ ETB-СЃРёРјРІРѕР»Р°
         msg = ArrayUtils.add(msg, (byte)23);
 
         int index = 0;
-        for (int i = width - 1; i >= 0; i--) {
-            for (int j = height - 1; j >= 0; j--) {
-                // Получение значение пикселя в RGB
+        // РџСЂРѕС…РѕРґ РїРѕ РІСЃРµРј РїРёРєСЃРµР»СЏРј
+        for (int i = img.getWidth() - 1; i >= 0; i--) {
+            for (int j = img.getHeight() - 1; j >= 0; j--) {
+                // Р”РѕСЃС‚Р°РµРј Р·РЅР°С‡РµРЅРёСЏ РїРёРєСЃРµР»СЏ RGB
                 int pixel = img.getRGB(i, j);
-
+                // РњР°СЃСЃРёРІ Р·РЅР°С‡РµРЅРёР№ РєР°Р¶РґРѕРіРѕ С†РІРµС‚Р°
                 int [] rgb = new int[] {(pixel & 0xff0000) >> 16, (pixel & 0xff00) >> 8, (pixel & 0xff)};
                 for (int k = 0; k < 3; k++) {
                     if (index < msg.length * 8) {
+                        // Р•СЃР»Рё СЃРѕРѕР±С‰РµРЅРёРµ РµС‰Рµ РїРѕР»РЅРѕСЃС‚СЊСЋ РЅРµ РІСЃС‚СЂРѕРµРЅРѕ
+                        // Р’СЃС‚СЂР°РµРІС‹РІР°РµРј РѕРґРёРЅ Р±РёС‚ РёР· СЃРѕРѕР±С‰РµРЅРёСЏ РІ Р±Р°Р№С‚ С†РІРµС‚Р° РїРёРєСЃРµР»СЏ
                         rgb[k] = replaceBit(rgb[k], getBit(msg, index), 0);
                         index++;
                     } else {
@@ -39,26 +37,25 @@ public class LSB {
         return img;
     }
 
-    // Внедрение сообщения
+    // Р’СЃС‚СЂР°РёРІР°РЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ РІ РёР·РѕР±СЂР°Р¶РµРЅРёРµ
     public static BufferedImage encodeImage(BufferedImage img, String msg) {
-        // Получение ширины и высоты изображение
-        int width = img.getWidth();
-        int height = img.getHeight();
-
-        // Перевод строки в массив байтов
+        // РџРµСЂРµРІРѕРґ СЃС‚СЂРѕРєРё РІ Р±Р°Р№С‚РѕРІС‹Р№ РјР°СЃСЃРёРІ
         byte[] msgByte = msg.getBytes(StandardCharsets.US_ASCII);
-        // Добавление в сообщение символа окончания блока
+        // Р”РѕР±Р°РІР»РµРЅРёРµ ETB-СЃРёРјРІРѕР»Р°
         msgByte = ArrayUtils.add(msgByte, (byte)23);
 
         int index = 0;
-        for (int i = width - 1; i >= 0; i--) {
-            for (int j = height - 1; j >= 0; j--) {
-                // Получение значение пикселя в RGB
+        // РџСЂРѕС…РѕРґ РїРѕ РІСЃРµРј РїРёРєСЃРµР»СЏРј
+        for (int i = img.getWidth() - 1; i >= 0; i--) {
+            for (int j = img.getHeight() - 1; j >= 0; j--) {
+                // Р”РѕСЃС‚Р°РµРј Р·РЅР°С‡РµРЅРёСЏ РїРёРєСЃРµР»СЏ RGB
                 int pixel = img.getRGB(i, j);
-
+                // РњР°СЃСЃРёРІ Р·РЅР°С‡РµРЅРёР№ РєР°Р¶РґРѕРіРѕ С†РІРµС‚Р°
                 int [] rgb = new int[] {(pixel & 0xff0000) >> 16, (pixel & 0xff00) >> 8, (pixel & 0xff)};
                 for (int k = 0; k < 3; k++) {
                     if (index < msgByte.length * 8) {
+                        // Р•СЃР»Рё СЃРѕРѕР±С‰РµРЅРёРµ РµС‰Рµ РїРѕР»РЅРѕСЃС‚СЊСЋ РЅРµ РІСЃС‚СЂРѕРµРЅРѕ
+                        // Р’СЃС‚СЂР°РµРІС‹РІР°РµРј РѕРґРёРЅ Р±РёС‚ РёР· СЃРѕРѕР±С‰РµРЅРёСЏ РІ РёРЅРґРµРєСЃ 0 Р±Р°Р№С‚Р° РєР°Р¶РґРѕРіРѕ С†РІРµС‚Р° РїРёРєСЃРµР»СЏ
                         rgb[k] = replaceBit(rgb[k], getBit(msgByte, index), 0);
                         index++;
                     } else {
@@ -72,23 +69,22 @@ public class LSB {
         return img;
     }
 
-    // Извлечение сообщения
+    // РР·РІР»РµС‡РµРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ РёР· РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
     public static String decodeImage(BufferedImage img) {
-        // Получение ширины и высоты изображение
-        int width = img.getWidth();
-        int height = img.getHeight();
-
-        // Множество бит извлекаемого сообщения
+        // РЎРѕР·РґР°РµРј СЃРїРёСЃРѕРє Р±РёС‚
         ArrayList<Boolean> bits = new ArrayList<Boolean>();
-        for (int i = width - 1; i >= 0; i--) {
-            for (int j = height - 1; j >= 0; j--) {
-                // Получение значение пикселя в RGB
+        for (int i = img.getWidth() - 1; i >= 0; i--) {
+            for (int j = img.getHeight() - 1; j >= 0; j--) {
+                // Р”РѕСЃС‚Р°РµРј Р·РЅР°С‡РµРЅРёСЏ РїРёРєСЃРµР»СЏ RGB
                 int pixel = img.getRGB(i, j);
-
+                // РњР°СЃСЃРёРІ Р·РЅР°С‡РµРЅРёР№ РєР°Р¶РґРѕРіРѕ С†РІРµС‚Р°
                 int [] rgb = new int[] {(pixel & 0xff0000) >> 16, (pixel & 0xff00) >> 8, (pixel & 0xff)};
                 for (int k = 0; k < 3; k++) {
                     if (!checkETB(bits)) {
+                        // Р•СЃР»Рё РјС‹ РµС‰Рµ РЅРµ РґРѕС€Р»Рё РґРѕ ETB-СЃРёРјРІРѕР»Р°
+                        // Р”РѕСЃС‚Р°РµРј Р±РёС‚ РёР· РёРЅРґРµРєСЃР° 0 Р±Р°Р№С‚Р° РєР°Р¶РѕРіРѕ С†РІРµС‚Р° РїРёРєСЃРµР»СЏ
                         rgb[k] = (rgb[k] & 1);
+                        // Р—Р°РїРёСЃС‹РІР°РµРј Р·РЅР°С‡РµРЅРёРµ Р±РёС‚Р° РІ СЃРїРёСЃРѕРє
                         if (rgb[k] == 1) bits.add(true);
                         else bits.add(false);
                     } else {
@@ -104,20 +100,15 @@ public class LSB {
         img.setRGB(i, j, (rgb[0] & 0xff) << 16 | (rgb[1] & 0xff) << 8 | (rgb[2] & 0xff));
     }
 
-    // Замена бита в байте по индексу
+    // РР·РјРµРЅРµРЅРёРµ Р·РЅР°С‡РµРЅРёРµ Р±РёС‚Р° РІ Р±Р°Р№С‚Рµ РЅР° Р·Р°РґР°РЅРЅРѕРµ РїРѕ РёРЅРґРµРєСЃСѓ
     private static int replaceBit(int num, boolean bit, int bitIndex) {
         int mask = 1 << bitIndex;
-        // Если новый бит равен 1, то устанавливаем его
-        if (bit) {
-            num |= mask;
-        } else {
-            // Если новый бит равен 0, то сбрасываем его
-            num &= ~mask;
-        }
+        if (bit) num |= mask;
+        else num &= ~mask;
         return num;
     }
 
-    // Получение бита из массива байтов по индексу
+    // РР·РІР»РµС‡РµРЅРёРµ Р±РёС‚Р° РёР· РјР°СЃСЃРёРІР° Р±Р°Р№С‚ РїРѕ РёРЅРґРµРєСЃСѓ
     private static boolean getBit(byte[] bytes, int bitIndex) {
         int byteIndex = bitIndex / 8;
         int bitOffset = bitIndex % 8;
@@ -128,15 +119,16 @@ public class LSB {
         return ((targetByte >> (7 - bitOffset)) & 1) == 1;
     }
 
-    // Проверка на символ окончания блока
+    // РџСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ ETB-СЃРёРјРѕР»Р°
     private static boolean checkETB(ArrayList<Boolean> bits) {
         if (bits.size() % 8 != 0 || bits.size() == 0) return false;
-        // ETB-символ 00010111
+        // ETB-СЃРёРјРІРѕР» РІ bin = 00010111
         else return  bits.get(bits.size() - 1) && bits.get(bits.size() - 2) && bits.get(bits.size() - 3) &&
                 !bits.get(bits.size() - 4) && bits.get(bits.size() - 5) &&
                 !bits.get(bits.size() - 6) && !bits.get(bits.size() - 7) && !bits.get(bits.size() - 8);
     }
 
+    // РљРѕРЅРІРµСЂС‚Р°С†РёСЏ СЃРїРёСЃРєР° Р±РёС‚ РІ Р±Р°Р№С‚С‹
     private static byte[] bitsToBytes(ArrayList<Boolean> bits) {
         byte [] bytes = new byte[bits.size() / 8 - 1];
         if (bits.size() % 8 != 0) return bytes;
