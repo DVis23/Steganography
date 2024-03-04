@@ -4,8 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.awt.image.BufferedImage;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
+import java.util.Objects;
 
 public class LSB {
 
@@ -29,9 +28,12 @@ public class LSB {
                     if (index < msg.length * 8) {
                         rgb[k] = replaceBit(rgb[k], getBit(msg, index), 0);
                         index++;
+                    } else {
+                        setRGB(img, i, j, rgb);
+                        return img;
                     }
                 }
-                img.setRGB(i, j, (rgb[0] & 0xff) << 16 | (rgb[1] & 0xff) << 8 | (rgb[2] & 0xff));
+                setRGB(img, i, j, rgb);
             }
         }
         return img;
@@ -59,9 +61,12 @@ public class LSB {
                     if (index < msgByte.length * 8) {
                         rgb[k] = replaceBit(rgb[k], getBit(msgByte, index), 0);
                         index++;
+                    } else {
+                        setRGB(img, i, j, rgb);
+                        return img;
                     }
                 }
-                img.setRGB(i, j, (rgb[0] & 0xff) << 16 | (rgb[1] & 0xff) << 8 | (rgb[2] & 0xff));
+                setRGB(img, i, j, rgb);
             }
         }
         return img;
@@ -86,11 +91,17 @@ public class LSB {
                         rgb[k] = (rgb[k] & 1);
                         if (rgb[k] == 1) bits.add(true);
                         else bits.add(false);
+                    } else {
+                        return new String(Objects.requireNonNull(bitsToBytes(bits)));
                     }
                 }
             }
         }
-        return new String(bitsToBytes(bits));
+        return new String(Objects.requireNonNull(bitsToBytes(bits)));
+    }
+
+    public static void setRGB(BufferedImage img, int i, int j, int[] rgb) {
+        img.setRGB(i, j, (rgb[0] & 0xff) << 16 | (rgb[1] & 0xff) << 8 | (rgb[2] & 0xff));
     }
 
     // Замена бита в байте по индексу
@@ -127,6 +138,7 @@ public class LSB {
     }
 
     private static byte[] bitsToBytes(ArrayList<Boolean> bits) {
+        if (bits.size() % 8 != 0) return null;
         byte [] bytes = new byte[bits.size() / 8 - 1];
         for (int i = 0; i < bits.size() - 8; i+=8) {
             StringBuilder sb = new StringBuilder();
