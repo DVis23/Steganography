@@ -7,9 +7,11 @@ import java.util.BitSet;
 public class LSB {
 
     // Внедрение сообщения
-    public static BufferedImage encodeImage(BufferedImage img, byte[] msg, int msgSize) {
+    public static BufferedImage encodeImage(BufferedImage img, byte[] msg) {
+        // Получение ширины и высоты изображение
         int width = img.getWidth();
         int height = img.getHeight();
+
         int index = 0;
 
         for (int i = width - 1; i >= 0; i--) {
@@ -18,7 +20,7 @@ public class LSB {
 
                 int [] rgb = new int[] {(pixel & 0xff0000) >> 16, (pixel & 0xff00) >> 8, (pixel & 0xff)};
                 for (int k = 0; k < 3; k++) {
-                    if (index < msgSize) {
+                    if (index < msg.length * 8) {
                         rgb[k] = replaceBit(rgb[k], getBit(msg, index), 0);
                         index++;
                     } else {
@@ -34,6 +36,7 @@ public class LSB {
 
     // Извлечение сообщения
     public static byte[] decodeImage(BufferedImage img, int msgSize) {
+        // Получение ширины и высоты изображение
         int width = img.getWidth();
         int height = img.getHeight();
 
@@ -41,7 +44,6 @@ public class LSB {
         BitSet bitsetMsg = new BitSet();
         for (int i = width - 1; i >= 0; i--) {
             for (int j = height - 1; j >= 0; j--) {
-
                 int pixel = img.getRGB(i, j);
 
                 int [] rgb = new int[] {(pixel & 0xff0000) >> 16, (pixel & 0xff00) >> 8, (pixel & 0xff)};
@@ -51,9 +53,7 @@ public class LSB {
                         rgb[k] = (rgb[k] & 1);
                         if (rgb[k] == 1) bitsetMsg.set(index);
                         index++;
-                    } else {
-                        return reverse(bitsetMsg.toByteArray());
-                    }
+                    } else return reverse(bitsetMsg.toByteArray());
                 }
 
             }
