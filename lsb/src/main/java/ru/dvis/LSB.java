@@ -69,7 +69,7 @@ public class LSB {
         return img;
     }
 
-    // Извлечение сообщения из изображения
+    // извлечение сообщения из изображения
     public static String decodeImage(BufferedImage img) {
         // Создаем список бит
         ArrayList<Boolean> bits = new ArrayList<Boolean>();
@@ -100,7 +100,7 @@ public class LSB {
         img.setRGB(i, j, (rgb[0] & 0xff) << 16 | (rgb[1] & 0xff) << 8 | (rgb[2] & 0xff));
     }
 
-    // Изменение значение бита в байте на заданное по индексу
+    // изменение значение бита в байте на заданное по индексу
     private static int replaceBit(int num, boolean bit, int bitIndex) {
         int mask = 1 << bitIndex;
         if (bit) num |= mask;
@@ -108,7 +108,7 @@ public class LSB {
         return num;
     }
 
-    // Извлечение бита из массива байт по индексу
+    // извлечение бита из массива байт по индексу
     private static boolean getBit(byte[] bytes, int bitIndex) {
         int byteIndex = bitIndex / 8;
         int bitOffset = bitIndex % 8;
