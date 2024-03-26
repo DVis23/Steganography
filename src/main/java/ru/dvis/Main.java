@@ -17,12 +17,16 @@ public class Main {
                 "For example, in a future release, synchronization may fail.";
 
         BufferedImage img = ImageIO.read(new File("image/2.jpg"));
-        BufferedImage lsbImg = LSB.encodeImage(img, msg);
+        //BufferedImage lsbImg = LSB.encodeImage(img, msg);
+        BufferedImage cjbImg = CJB.encodeImage(img, msg, 0.1, 2);
 
         try {
-            ImageIO.write(lsbImg, "png", new File("image/lsb.png"));
-            BufferedImage msgImg = ImageIO.read(new File("image/lsb.png"));
-            String decodeMsg = LSB.decodeImage(msgImg);
+            //ImageIO.write(lsbImg, "png", new File("image/lsb.png"));
+            ImageIO.write(cjbImg, "png", new File("image/cjb.png"));
+            //BufferedImage msgImg = ImageIO.read(new File("image/lsb.png"));
+            BufferedImage msgImg = ImageIO.read(new File("image/cjb.png"));
+            //String decodeMsg = LSB.decodeImage(msgImg);
+            String decodeMsg = CJB.decodeImage(msgImg, 2);
             System.out.println(decodeMsg);
         } catch (IOException ignored) {
         }

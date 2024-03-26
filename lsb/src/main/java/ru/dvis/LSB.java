@@ -8,36 +8,6 @@ import java.util.ArrayList;
 public class LSB {
 
     // Встраивание сообщения в изображение
-    public static BufferedImage encodeImage(BufferedImage img, byte[] msg) {
-        // Добавление ETB-символа
-        msg = ArrayUtils.add(msg, (byte)23);
-
-        int index = 0;
-        // Проход по всем пикселям
-        for (int i = img.getWidth() - 1; i >= 0; i--) {
-            for (int j = img.getHeight() - 1; j >= 0; j--) {
-                // Достаем значения пикселя RGB
-                int pixel = img.getRGB(i, j);
-                // Массив значений каждого цвета
-                int [] rgb = new int[] {(pixel & 0xff0000) >> 16, (pixel & 0xff00) >> 8, (pixel & 0xff)};
-                for (int k = 0; k < 3; k++) {
-                    if (index < msg.length * 8) {
-                        // Если сообщение еще полностью не встроено
-                        // Встраевываем один бит из сообщения в байт цвета пикселя
-                        rgb[k] = replaceBit(rgb[k], getBit(msg, index), 0);
-                        index++;
-                    } else {
-                        setRGB(img, i, j, rgb);
-                        return img;
-                    }
-                }
-                setRGB(img, i, j, rgb);
-            }
-        }
-        return img;
-    }
-
-    // Встраивание сообщения в изображение
     public static BufferedImage encodeImage(BufferedImage img, String msg) {
         // Перевод строки в байтовый массив
         byte[] msgByte = msg.getBytes(StandardCharsets.US_ASCII);
@@ -130,15 +100,19 @@ public class LSB {
 
     // Конвертация списка бит в байты
     private static byte[] bitsToBytes(ArrayList<Boolean> bits) {
-        byte [] bytes = new byte[bits.size() / 8 - 1];
-        if (bits.size() % 8 != 0) return bytes;
-        for (int i = 0; i < bits.size() - 8; i+=8) {
-            StringBuilder sb = new StringBuilder();
+        int byteCount = (int) Math.ceil(bits.size() / 8.0);
+        byte[] bytes = new byte[byteCount];
+
+        for (int i = 0; i < byteCount; i++) {
             for (int j = 0; j < 8; j++) {
-                if (bits.get(i + j)) sb.append("1");
-                else sb.append("0");
+                if (i*8 + j < bits.size()) {
+                    if (bits.get(i*8 + j)) {
+                        bytes[i] |= (byte) (1 << (7 - j));
+                    }
+                } else {
+                    break;
+                }
             }
-            bytes[i / 8] = Byte.parseByte(sb.toString(), 2);
         }
         return bytes;
     }
