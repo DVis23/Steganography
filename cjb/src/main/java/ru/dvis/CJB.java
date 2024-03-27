@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class CJB {
 
     // Встраивание сообщения в изображение
-    public static BufferedImage encodeImage(BufferedImage img, String msg, double h, int o) {
+    public static BufferedImage encodeImage(BufferedImage img, String msg, double lambda, int sigma) {
         // Перевод строки в байтовый массив
         byte[] msgByte = msg.getBytes(StandardCharsets.US_ASCII);
         // Добавление ETB-символа
@@ -17,8 +17,8 @@ public class CJB {
 
         int index = 0;
         // Проход по всем пикселям
-        for (int i = o; i < img.getWidth() - o; i++) {
-            for (int j = o; j < img.getHeight() - o; j++) {
+        for (int i = sigma; i < img.getWidth() - sigma; i++) {
+            for (int j = sigma; j < img.getHeight() - sigma; j++) {
                 if (index < msgByte.length * 8) {
                     // Если сообщение еще полностью не встроено
                     // Встраевываем один бит из сообщения в индекс 0 байта каждого цвета пикселя
@@ -31,8 +31,8 @@ public class CJB {
                     int brightness = getBrightness(img, i, j);
 
                     // Замена значения пикселя blue
-                    if (getBit(msgByte, index)) blue +=  (int) (h * brightness);
-                    else blue -=  (int) (h * brightness);
+                    if (getBit(msgByte, index)) blue += (int) (lambda * brightness);
+                    else blue -= (int) (lambda * brightness);
 
                     // Создание нового RGB значения
                     pixel = (pixel & 0xFF00FFFF) | (blue << 16);
@@ -48,22 +48,22 @@ public class CJB {
     }
 
     // извлечение сообщения из изображения
-    public static String decodeImage(BufferedImage img, int o) {
+    public static String decodeImage(BufferedImage img, int sigma) {
         // Создаем список бит
         ArrayList<Boolean> bits = new ArrayList<Boolean>();
-        for (int i = o; i < img.getWidth() - o; i++) {
-            for (int j = o; j < img.getHeight() - o; j++) {
+        for (int i = sigma; i < img.getWidth() - sigma; i++) {
+            for (int j = sigma; j < img.getHeight() - sigma; j++) {
                 if (!checkETB(bits)) {
                     // Если мы еще не дошли до ETB-символа
 
                     // Получение значения синего
                     int blue = getBlue(img, i, j);
 
-                    // Получение среденего значения синего по области o
+                    // Получение среденего значения синего по области sigma
                     int middleBlue = 0;
-                    for (int k = 1; k <= o; k++) middleBlue += getBlue(img, i, j - k) + getBlue(img, i - k, j)
+                    for (int k = 1; k <= sigma; k++) middleBlue += getBlue(img, i, j - k) + getBlue(img, i - k, j)
                             + getBlue(img, i, j + k) + getBlue(img, i + k, j);
-                    middleBlue /= 4 * o;
+                    middleBlue /= 4 * sigma;
 
                     // Записываем значение бита в список
                     if (blue > middleBlue) bits.add(true);
@@ -87,7 +87,7 @@ public class CJB {
         int pixel = img.getRGB(i, j);
         // Массив значений каждого цвета
         int [] rgb = new int[] {(pixel & 0xff0000) >> 16, (pixel & 0xff00) >> 8, (pixel & 0xff)};
-        return (int) (0.3 * rgb[0] + 0.59 * rgb[1] + 0.11 * rgb[2]);
+        return (int) (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]);
     }
     // извлечение бита из массива байт по индексу
     private static boolean getBit(byte[] bytes, int bitIndex) {
@@ -102,7 +102,7 @@ public class CJB {
 
     // Проверка наличия ETB-симола
     private static boolean checkETB(ArrayList<Boolean> bits) {
-        if (bits.size() % 8 != 0 || bits.size() == 0) return false;
+        if (bits.size() % 8 != 0 || bits.isEmpty()) return false;
             // ETB-символ в bin = 00010111
         else return  bits.get(bits.size() - 1) && bits.get(bits.size() - 2) && bits.get(bits.size() - 3) &&
                 !bits.get(bits.size() - 4) && bits.get(bits.size() - 5) &&

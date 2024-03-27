@@ -91,7 +91,7 @@ public class LSB {
 
     // Проверка наличия ETB-симола
     private static boolean checkETB(ArrayList<Boolean> bits) {
-        if (bits.size() % 8 != 0 || bits.size() == 0) return false;
+        if (bits.size() % 8 != 0 || bits.isEmpty()) return false;
         // ETB-символ в bin = 00010111
         else return  bits.get(bits.size() - 1) && bits.get(bits.size() - 2) && bits.get(bits.size() - 3) &&
                 !bits.get(bits.size() - 4) && bits.get(bits.size() - 5) &&
