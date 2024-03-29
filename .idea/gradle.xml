@@ -9,9 +9,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/LSB" />
             <option value="$PROJECT_DIR$/cjb" />
-            <option value="$PROJECT_DIR$/lcb" />
             <option value="$PROJECT_DIR$/lsb" />
           </set>
         </option>
