@@ -1,4 +1,4 @@
-import ru.dvis.LSB;
+import ru.dvis.KJB;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -6,8 +6,8 @@ import java.io.File;
 import java.io.IOException;
 
 import static ru.dvis.BitsUtils.*;
-public class Test {
 
+public class Test {
     public static void main(String [] args) throws IOException {
 
         String msg = "I wish to get advice on troubleshooting a USB drive. A problem that have nerdsniped me.\n" +
@@ -28,17 +28,17 @@ public class Test {
                 "\n" +
                 "roughly at the speed I expected after a few transfers of test files.";
 
-        BufferedImage img = ImageIO.read(new File("image/2.jpg"));
-        BufferedImage lsbImg = LSB.encodeImage(img, msg);
-
+        BufferedImage img = ImageIO.read(new File("image/23.png"));
+        BufferedImage cjbImg = KJB.encodeImage(img, msg, 0.5, 3);
 
         try {
-            ImageIO.write(lsbImg, "png", new File("image/lsb.png"));
-            BufferedImage msgImg = ImageIO.read(new File("image/lsb.png"));
-            String decodeMsg = LSB.decodeImage(msgImg);
+            ImageIO.write(cjbImg, "png", new File("image/cjb.png"));
+            BufferedImage msgImg = ImageIO.read(new File("image/cjb.png"));
+            String decodeMsg = KJB.decodeImage(msgImg, 3);
             System.out.println(decodeMsg);
         } catch (IOException ignored) {
         }
 
     }
 }
+

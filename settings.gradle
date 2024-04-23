@@ -1,5 +1,6 @@
 rootProject.name = 'Steganography'
 include 'lsb'
-include 'cjb'
-
+include 'bruyndonckx'
+include 'kjb'
+include 'utils'
 
