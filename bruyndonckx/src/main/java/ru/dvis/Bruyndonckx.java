@@ -119,6 +119,7 @@ public class Bruyndonckx {
                     for (int k = 0; k < 8; k++) {
                         for (int l = 0; l < 8; l++) {
                             int pixelBrightness = getBrightness(img, i+k, j+l);
+                            // Заменяем значения яркости пикселя ссотвественно категории
                             if (pixelBrightness <= pixelsBrightness[middle]) {
                                 if (masks[pixelIndex]) {
                                     // l2A

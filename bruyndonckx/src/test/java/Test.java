@@ -11,13 +11,13 @@ public class Test {
     public static void main(String [] args) throws IOException {
         String msg = "I wish to get advice on troubleshooting a USB drive.";
 
-        BufferedImage img = ImageIO.read(new File("image/3.jpg"));
-        BufferedImage cjbImg = Bruyndonckx.encodeImage(img, msg, "key", 90, 10);
+        BufferedImage img = ImageIO.read(new File("image/23.png"));
+        BufferedImage bruyndockxImg = Bruyndonckx.encodeImage(img, msg, "key", 80, 10);
 
         try {
-            ImageIO.write(cjbImg, "png", new File("image/bruyndockx.png"));
+            ImageIO.write(bruyndockxImg, "png", new File("image/bruyndockx.png"));
             BufferedImage msgImg = ImageIO.read(new File("image/bruyndockx.png"));
-            String decodeMsg = Bruyndonckx.decodeImage(msgImg, "key", 90, 10);
+            String decodeMsg = Bruyndonckx.decodeImage(msgImg, "key", 80, 10);
             System.out.println(decodeMsg);
         } catch (IOException ignored) {
         }

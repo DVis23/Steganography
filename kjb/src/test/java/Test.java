@@ -29,10 +29,10 @@ public class Test {
                 "roughly at the speed I expected after a few transfers of test files.";
 
         BufferedImage img = ImageIO.read(new File("image/23.png"));
-        BufferedImage cjbImg = KJB.encodeImage(img, msg, 0.5, 3);
+        BufferedImage kjbImg = KJB.encodeImage(img, msg, 0.5, 3);
 
         try {
-            ImageIO.write(cjbImg, "png", new File("image/cjb.png"));
+            ImageIO.write(kjbImg, "png", new File("image/cjb.png"));
             BufferedImage msgImg = ImageIO.read(new File("image/cjb.png"));
             String decodeMsg = KJB.decodeImage(msgImg, 3);
             System.out.println(decodeMsg);
