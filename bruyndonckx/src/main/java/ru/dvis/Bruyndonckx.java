@@ -13,6 +13,7 @@ import static ru.dvis.BitsUtils.*;
 import static ru.dvis.PixelUtils.*;
 
 public class Bruyndonckx {
+    private static final int BLOCK_SIZE = 8;
 
     public static BufferedImage encodeImage(BufferedImage img, String msg, String key, double alpha, int delta) {
         // Перевод строк в байтовые массивы
@@ -26,15 +27,15 @@ public class Bruyndonckx {
 
         int index = 0;
         // Проход по всем блокам
-        for (int i = 0; i < img.getWidth() - img.getWidth() % 8; i+=8) {
-            for (int j = 0; j < img.getHeight() - img.getHeight() % 8; j+=8) {
-                if (index < msgByte.length * 8) {
+        for (int i = 0; i < img.getWidth() - img.getWidth() % BLOCK_SIZE; i+=BLOCK_SIZE) {
+            for (int j = 0; j < img.getHeight() - img.getHeight() % BLOCK_SIZE; j+=BLOCK_SIZE) {
+                if (index < msgByte.length * BLOCK_SIZE) {
                     int [] pixelsBrightness = new int[64];
                     boolean [] masks = new boolean[64];
                     // Проход по пикселям блока
                     int pixelIndex = 0;
-                    for (int k = 0; k < 8; k++) {
-                        for (int l = 0; l < 8; l++) {
+                    for (int k = 0; k < BLOCK_SIZE; k++) {
+                        for (int l = 0; l < BLOCK_SIZE; l++) {
                             pixelsBrightness[pixelIndex] = getBrightness(img, i+k, j+l);
                             pixelIndex++;
                         }
@@ -46,7 +47,7 @@ public class Bruyndonckx {
                     if (calculateSlope(pixelsBrightness, middle) <= alpha) middle = pixelsBrightness.length / 2 - 1;
 
                     // Заполняем массив масок
-                    for (int k = 0; k < 64; k++) {
+                    for (int k = 0; k < BLOCK_SIZE*BLOCK_SIZE; k++) {
                         // Генерируем бинарное число
                         int r = random.nextInt(2);
                         // Вносим бинарное число в массив масок
@@ -59,8 +60,8 @@ public class Bruyndonckx {
                     int n1A = 0, n2A = 0, n1B = 0, n2B = 0;
                     // Проход по пикселям блока
                     pixelIndex = 0;
-                    for (int k = 0; k < 8; k++) {
-                        for (int l = 0; l < 8; l++) {
+                    for (int k = 0; k < BLOCK_SIZE; k++) {
+                        for (int l = 0; l < BLOCK_SIZE; l++) {
                             // Вычисляем сумму значений яркости для кажой из четырех групп пикселей и
                             // количество пикселей в каждой группе
                             int pixelBrightness = getBrightness(img, i+k, j+l);
@@ -116,8 +117,8 @@ public class Bruyndonckx {
 
                     // Проход по пикселям блока
                     pixelIndex = 0;
-                    for (int k = 0; k < 8; k++) {
-                        for (int l = 0; l < 8; l++) {
+                    for (int k = 0; k < BLOCK_SIZE; k++) {
+                        for (int l = 0; l < BLOCK_SIZE; l++) {
                             int pixelBrightness = getBrightness(img, i+k, j+l);
                             // Заменяем значения яркости пикселя ссотвественно категории
                             if (pixelBrightness <= pixelsBrightness[middle]) {
@@ -158,15 +159,15 @@ public class Bruyndonckx {
         ArrayList<Boolean> bits = new ArrayList<Boolean>();
 
         // Проход по всем блокам
-        for (int i = 0; i < img.getWidth() - img.getWidth() % 8; i+=8) {
-            for (int j = 0; j < img.getHeight() - img.getHeight() % 8; j+=8) {
+        for (int i = 0; i < img.getWidth() - img.getWidth() % BLOCK_SIZE; i+=BLOCK_SIZE) {
+            for (int j = 0; j < img.getHeight() - img.getHeight() % BLOCK_SIZE; j+=BLOCK_SIZE) {
                 if (!checkETB(bits)) {
                     int [] pixelsBrightness = new int[64];
                     boolean [] masks = new boolean[64];
                     // Проход по пикселям блока
                     int pixelIndex = 0;
-                    for (int k = 0; k < 8; k++) {
-                        for (int l = 0; l < 8; l++) {
+                    for (int k = 0; k < BLOCK_SIZE; k++) {
+                        for (int l = 0; l < BLOCK_SIZE; l++) {
                             pixelsBrightness[pixelIndex] = getBrightness(img, i+k, j+l);
                             pixelIndex++;
                         }
@@ -178,7 +179,7 @@ public class Bruyndonckx {
                     if (calculateSlope(pixelsBrightness, middle) <= alpha) middle = pixelsBrightness.length / 2 - 1;
 
                     // Заполняем массив масок
-                    for (int k = 0; k < 64; k++) {
+                    for (int k = 0; k < BLOCK_SIZE*BLOCK_SIZE; k++) {
                         // Генерируем бинарное число
                         int r = random.nextInt(2);
                         // Вносим бинарное число в массив масок
@@ -191,8 +192,8 @@ public class Bruyndonckx {
                     int n1A = 0, n2A = 0, n1B = 0, n2B = 0;
                     // Проход по пикселям блока
                     pixelIndex = 0;
-                    for (int k = 0; k < 8; k++) {
-                        for (int l = 0; l < 8; l++) {
+                    for (int k = 0; k < BLOCK_SIZE; k++) {
+                        for (int l = 0; l < BLOCK_SIZE; l++) {
                             // Вычисляем сумму значений яркости для кажой из четырех групп пикселей и
                             // количество пикселей в каждой группе
                             int pixelBrightness = getBrightness(img, i+k, j+l);
