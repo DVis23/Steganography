@@ -30,8 +30,8 @@ public class Bruyndonckx {
         for (int i = 0; i < img.getWidth() - img.getWidth() % BLOCK_SIZE; i+=BLOCK_SIZE) {
             for (int j = 0; j < img.getHeight() - img.getHeight() % BLOCK_SIZE; j+=BLOCK_SIZE) {
                 if (index < msgByte.length * BLOCK_SIZE) {
-                    int [] pixelsBrightness = new int[64];
-                    boolean [] masks = new boolean[64];
+                    int [] pixelsBrightness = new int[BLOCK_SIZE*BLOCK_SIZE];
+                    boolean [] masks = new boolean[BLOCK_SIZE*BLOCK_SIZE];
                     // Проход по пикселям блока
                     int pixelIndex = 0;
                     for (int k = 0; k < BLOCK_SIZE; k++) {
@@ -162,8 +162,8 @@ public class Bruyndonckx {
         for (int i = 0; i < img.getWidth() - img.getWidth() % BLOCK_SIZE; i+=BLOCK_SIZE) {
             for (int j = 0; j < img.getHeight() - img.getHeight() % BLOCK_SIZE; j+=BLOCK_SIZE) {
                 if (!checkETB(bits)) {
-                    int [] pixelsBrightness = new int[64];
-                    boolean [] masks = new boolean[64];
+                    int [] pixelsBrightness = new int[BLOCK_SIZE*BLOCK_SIZE];
+                    boolean [] masks = new boolean[BLOCK_SIZE*BLOCK_SIZE];
                     // Проход по пикселям блока
                     int pixelIndex = 0;
                     for (int k = 0; k < BLOCK_SIZE; k++) {
