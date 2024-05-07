@@ -3,4 +3,5 @@ include 'lsb'
 include 'bruyndonckx'
 include 'kjb'
 include 'utils'
+include 'kochZhao'
 

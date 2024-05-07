@@ -54,4 +54,24 @@ public class PixelUtils {
         Color newColor = new Color(rgb[0], rgb[1], rgb[2]);
         img.setRGB(i, j, newColor.getRGB());
     }
+
+    public static double[] RGBToYCbCr(int[] pixel) {
+        int r = pixel[0];
+        int g = pixel[1];
+        int b = pixel[2];
+        double y = 0.299 * r + 0.587 * g + 0.114 * b;
+        double cb = -0.168736 * r - 0.331264 * g + 0.5 * b + 128;
+        double cr = 0.5 * r - 0.418688 * g - 0.081312 * b + 128;
+        return new double[]{y, cb, cr};
+    }
+
+    public static int[] YCbCrToRGB(double[] pixel) {
+        double y = pixel[0];
+        double cb = pixel[1];
+        double cr = pixel[2];
+        int r = (int) (y + 1.402 * (cr - 128));
+        int g = (int) (y - 0.34414 * (cb - 128) - 0.71414 * (cr - 128));
+        int b = (int) (y + 1.772 * (cb - 128));
+        return new int[]{r, g, b};
+    }
 }
